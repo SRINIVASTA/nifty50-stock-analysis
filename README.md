@@ -19,3 +19,18 @@ This project fetches and analyzes real-time financial data for Nifty 50 companie
 
 ## 📦 Project Structure
 
+Data Source
+Yahoo Finance via yfinance
+
+yaml
+Copy
+Edit
+
+---
+
+Would you like me to generate this as a `.zip` for you, or guide you in GitHub Desktop instead?
+
+
+
+Ask ChatGPT
+
