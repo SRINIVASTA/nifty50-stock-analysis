@@ -5,7 +5,16 @@ import pandas as pd
 import time
 from datetime import date
 
-tickers = [  # ... (your ticker list)  ]
+tickers = [
+    'HEROMOTOCO.NS', 'BEL.NS', 'BPCL.NS', 'SHRIRAMFIN.NS', 'TATACONSUM.NS', 'TRENT.NS', 'ADANIENT.NS',
+    'RELIANCE.NS', 'TCS.NS', 'HDFCBANK.NS', 'INFY.NS', 'HINDUNILVR.NS', 'ICICIBANK.NS', 'KOTAKBANK.NS',
+    'ITC.NS', 'SBIN.NS', 'BHARTIARTL.NS', 'BAJAJFINSV.NS', 'AXISBANK.NS', 'MARUTI.NS', 'LT.NS',
+    'ASIANPAINT.NS', 'M&M.NS', 'BAJFINANCE.NS', 'TITAN.NS', 'SUNPHARMA.NS', 'HCLTECH.NS', 'ULTRACEMCO.NS',
+    'NESTLEIND.NS', 'TECHM.NS', 'POWERGRID.NS', 'GRASIM.NS', 'WIPRO.NS', 'INDUSINDBK.NS', 'NTPC.NS',
+    'ONGC.NS', 'TATASTEEL.NS', 'CIPLA.NS', 'DRREDDY.NS', 'JSWSTEEL.NS', 'HDFCLIFE.NS', 'BRITANNIA.NS',
+    'BAJAJ-AUTO.NS', 'EICHERMOT.NS', 'HINDALCO.NS', 'COALINDIA.NS', 'ADANIPORTS.NS', 'SBILIFE.NS',
+    'TATAMOTORS.NS', 'APOLLOHOSP.NS'
+]
 
 def fetch_ticker_data(ticker):
     # ... (same fetch logic) ...
