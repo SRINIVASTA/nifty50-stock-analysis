@@ -1,11 +1,9 @@
-# stock_analysis.py
-
 import yfinance as yf
 import pandas as pd
 import time
 from datetime import date
 
-ticker = [
+tickers = [
     "ADANIENT.NS", "ADANIPORTS.NS", "APOLLOHOSP.NS", "ASIANPAINT.NS", "AXISBANK.NS",
     "BAJAJ-AUTO.NS", "BAJFINANCE.NS", "BAJAJFINSV.NS", "BEL.NS", "BHARTIARTL.NS",
     "CIPLA.NS", "COALINDIA.NS", "DRREDDY.NS", "EICHERMOT.NS", "ETERNAL.NS",
@@ -17,9 +15,9 @@ ticker = [
     "SUNPHARMA.NS", "TCS.NS", "TATACONSUM.NS", "TATAMOTORS.NS", "TATASTEEL.NS",
     "TECHM.NS", "TITAN.NS", "TRENT.NS", "ULTRACEMCO.NS", "WIPRO.NS"
 ]
+
 def fetch_ticker_data(ticker):
     try:
-        print(f"Fetching data for {ticker}")
         stock_data = yf.Ticker(ticker)
         info = stock_data.info
 
@@ -40,31 +38,21 @@ def fetch_ticker_data(ticker):
         growth_rate = revenue_growth * 100 if revenue_growth is not None else 0
         intrinsic_value = (earnings_per_share * (8.5 + 2 * growth_rate)) if earnings_per_share is not None else None
 
-        competitive_advantage = None
-        market_share = None
-        brand_recognition = None
-        corporate_governance = None
-
         return [
             ticker, company_name, current_price, book_value, earnings_per_share,
             price_to_earnings, debt_to_equity, return_on_equity, dividend_yield,
             current_ratio, quick_ratio, operating_cashflow, revenue_growth, pb_ratio,
-            intrinsic_value, competitive_advantage, market_share, brand_recognition,
-            corporate_governance
+            intrinsic_value, None, None, None, None
         ]
-    except Exception as e:
-        print(f"Error fetching data for {ticker}: {e}")
+    except Exception:
         return None
 
 def get_data():
     all_data = []
-    for ticker in tickers:
-        data = fetch_ticker_data(ticker)
-        if data:
-            all_data.append(data)
-        else:
-            all_data.append([ticker] + [None]*18)
-        time.sleep(1)  # Avoid hitting API rate limits
+    for tic in tickers:
+        data = fetch_ticker_data(tic)
+        all_data.append(data if data else [tic] + [None]*18)
+        time.sleep(1)
 
     columns = [
         'Ticker', 'Company Name', 'Current Price', 'Book Value', 'Earnings Per Share',
@@ -81,17 +69,21 @@ def get_data():
     tickers_to_retry = df[(df['Current Price'].isna()) | (df['Earnings Per Share'].isna())].index.tolist()
 
     while tickers_to_retry:
-        print(f"Retrying tickers with missing data: {tickers_to_retry}")
         time.sleep(5)
-        for ticker in tickers_to_retry:
-            data = fetch_ticker_data(ticker)
+        for tic in tickers_to_retry:
+            data = fetch_ticker_data(tic)
             if data:
-                df.loc[ticker] = data[1:]
-            else:
-                print(f"Retry failed for {ticker}")
+                for i, col in enumerate(df.columns):
+                    if pd.isna(df.at[tic, col]) and data[i + 1] is not None:
+                        df.at[tic, col] = data[i + 1]
             time.sleep(1)
         tickers_to_retry = df[(df['Current Price'].isna()) | (df['Earnings Per Share'].isna())].index.tolist()
 
     df['Date'] = date.today()
     df.sort_index(inplace=True)
     return df
+
+if __name__ == "__main__":
+    df = get_data()
+    filename = f"stock_analysis_{date.today()}.csv"
+    df.to_csv(filename)
