@@ -1,11 +1,10 @@
-
 import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.lines import Line2D
 import io
 
-from stock_analysis import sign_in, sign_up, access_denied, get_data
+from stock_analysis import get_data  # only import get_data now
 
 st.set_page_config(layout="wide")
 st.title("📊 Nifty 50 Stock Analysis")
@@ -59,25 +58,9 @@ def main_app():
         mime="image/png"
     )
 
-    if st.button("Sign Out"):
-        st.session_state.logged_in = False
-        st.session_state.username = ""
-        st.experimental_rerun()
-
 def app():
-    if "logged_in" not in st.session_state:
-        st.session_state.logged_in = False
-        st.session_state.username = ""
-
-    if st.session_state.logged_in:
-        main_app()
-    else:
-        col1, col2 = st.columns(2)
-        with col1:
-            sign_in()
-        with col2:
-            sign_up()
-        access_denied()
+    # Directly run the main app without login checks
+    main_app()
 
 if __name__ == "__main__":
     app()
