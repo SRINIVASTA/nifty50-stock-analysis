@@ -4,69 +4,7 @@ import yfinance as yf
 import pandas as pd
 import time
 from datetime import date
-import streamlit as st  # needed for session_state in auth functions only
-
-USERS_FILE = "users.json"
-
-# --- User Auth Code ---
-
-def load_users():
-    if os.path.exists(USERS_FILE):
-        with open(USERS_FILE, "r") as f:
-            return json.load(f)
-    else:
-        return {}
-
-def save_users(users):
-    with open(USERS_FILE, "w") as f:
-        json.dump(users, f)
-
-if "users" not in st.session_state:
-    st.session_state.users = load_users()
-
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-if "username" not in st.session_state:
-    st.session_state.username = ""
-
-def sign_up():
-    st.subheader("Sign Up")
-    new_user = st.text_input("New username", key="new_user")
-    new_password = st.text_input("New password", type="password", key="new_pass")
-    if st.button("Create account"):
-        if not new_user or not new_password:
-            st.error("Please enter both username and password.")
-        elif new_user in st.session_state.users:
-            st.error("Username already exists.")
-        else:
-            st.session_state.users[new_user] = new_password
-            save_users(st.session_state.users)
-            st.success("Account created! Please sign in.")
-            st.experimental_rerun()
-
-def sign_in():
-    st.subheader("Sign In")
-    username = st.text_input("Username", key="login_user")
-    password = st.text_input("Password", type="password", key="login_pass")
-    if st.button("Sign In"):
-        if username in st.session_state.users and st.session_state.users[username] == password:
-            st.session_state.logged_in = True
-            st.session_state.username = username
-            st.success(f"Welcome, {username}!")
-
-            # Add this debugging line:
-            st.write("Available attributes in st:", dir(st))
-
-            # Then try rerun
-            st.experimental_rerun()
-        else:
-            st.error("Invalid username or password.")
-
-def access_denied():
-    st.error("You do not have access to this app or it does not exist.")
-    st.info("Please sign in to continue.")
-    st.write("If you believe this is a bug, contact support.")
+import streamlit as st
 
 # --- Stock Data Functions ---
 
@@ -148,3 +86,9 @@ def get_data():
     df['Date'] = date.today()
     df.sort_index(inplace=True)
     return df
+
+# You can now just call get_data() and display it however you want:
+if __name__ == "__main__":
+    st.title("Stock Data")
+    df = get_data()
+    st.dataframe(df)
