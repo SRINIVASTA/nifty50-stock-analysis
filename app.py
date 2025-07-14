@@ -1,4 +1,7 @@
 import streamlit as st
+st.write("Streamlit version:", st.__version__)
+
+import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.lines import Line2D
