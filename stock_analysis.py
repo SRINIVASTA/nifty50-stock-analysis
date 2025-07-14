@@ -54,6 +54,11 @@ def sign_in():
             st.session_state.logged_in = True
             st.session_state.username = username
             st.success(f"Welcome, {username}!")
+
+            # Add this debugging line:
+            st.write("Available attributes in st:", dir(st))
+
+            # Then try rerun
             st.experimental_rerun()
         else:
             st.error("Invalid username or password.")
