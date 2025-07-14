@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import io
-from stock_analysis import get_data
+# from stock_analysis import get_data
 from matplotlib.lines import Line2D
 
 st.set_page_config(layout="wide")
